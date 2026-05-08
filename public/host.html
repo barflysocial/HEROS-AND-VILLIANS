@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Host | Heroes & Villains</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <nav class="nav">
+      <div class="brand"><span class="brand-mark">⚡</span> Heroes & Villains Host</div>
+      <div class="nav-links">
+        <a href="/">Title</a>
+        <a href="/player">Player</a>
+      </div>
+    </nav>
+
+    <div class="header-card">
+      <div>
+        <div class="kicker">Heroes & Villains • Power Chest</div>
+        <h2>Host Screen</h2>
+        <p>Create a session, give players the session code for RSVP, then use the host code to allow check-in. Each round now auto-populates scripted dangers on player screens.</p>
+      </div>
+      <button id="refreshBtn" class="secondary">Refresh</button>
+    </div>
+
+    <section class="grid">
+      <div class="col-4 stack">
+        <div class="card stack">
+          <h3>Create Session</h3>
+          <div id="createMsg"></div>
+          <form id="createForm" class="form-grid">
+            <label>
+              <small>Event name</small>
+              <input name="eventName" value="Heroes & Villains" />
+            </label>
+            <label>
+              <small>Venue</small>
+              <input name="venue" placeholder="Barfly Social" />
+            </label>
+            <label class="full">
+              <small>Host code / check-in code</small>
+              <input name="hostCode" minlength="3" placeholder="Example: HERO123" required />
+            </label>
+            <button class="full" type="submit">Create Live Session</button>
+          </form>
+        </div>
+
+        <div class="card stack">
+          <h3>Sessions</h3>
+          <div id="sessionList" class="session-list"></div>
+        </div>
+      </div>
+
+      <div class="col-8 stack">
+        <div id="noSessionCard" class="card">
+          <h3>No session selected</h3>
+          <p class="muted">Create or select a session to open host controls.</p>
+        </div>
+
+        <div id="controlCard" class="card stack hidden">
+          <div class="header-card">
+            <div>
+              <div class="kicker" id="selectedVenue">Session</div>
+              <h2 id="selectedName">Heroes & Villains</h2>
+              <p>Player RSVP Code: <span id="selectedCode" class="code-box">------</span></p>
+            </div>
+            <span id="selectedStatus" class="status-pill">RSVP</span>
+          </div>
+
+          <div class="meters">
+            <div class="meter">
+              <div class="meter-top"><span>Destruction</span><span id="destructionValue">0%</span></div>
+              <div class="meter-bar"><div id="destructionFill" class="meter-fill red"></div></div>
+            </div>
+            <div class="meter">
+              <div class="meter-top"><span>Fatalities</span><span id="fatalitiesValue">0%</span></div>
+              <div class="meter-bar"><div id="fatalitiesFill" class="meter-fill purple"></div></div>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="col-6 card stack" style="box-shadow:none;">
+              <h3>Game Controls</h3>
+              <div class="timer" id="timerDisplay">3:00</div>
+              <p class="muted" id="roundDisplay">Round 0 of 5</p>
+              <div class="actions">
+                <button id="startBtn" class="good">Start Game</button>
+                <button id="nextRoundBtn">Next Round</button>
+                <button id="resetBtn" class="secondary">Reset</button>
+                <button id="endBtn" class="danger">End</button>
+              </div>
+            </div>
+
+            <div class="col-6 card stack" style="box-shadow:none;">
+              <h3>Meter Controls</h3>
+              <div class="actions">
+                <button data-meter="destruction" data-delta="10" class="secondary">+10 Destruction</button>
+                <button data-meter="destruction" data-delta="-10" class="secondary">-10 Destruction</button>
+                <button data-meter="fatalities" data-delta="10" class="secondary">+10 Fatalities</button>
+                <button data-meter="fatalities" data-delta="-10" class="secondary">-10 Fatalities</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card stack" style="box-shadow:none;">
+            <div class="kicker" id="hostRoundKicker">Round Story</div>
+            <h3 id="hostRoundTitle">Auto-Populated Dangers</h3>
+            <p class="muted" id="hostRoundStory">Start the game to load the round storyline and timed dangers.</p>
+            <div id="hostDangerList" class="danger-list"></div>
+          </div>
+
+          <div class="card stack" style="box-shadow:none;">
+            <h3>Manual Broadcast Override</h3>
+            <p class="muted">Optional: send an extra host message. The main dangers now appear automatically by round timer.</p>
+            <form id="broadcastForm" class="form-grid">
+              <label>
+                <small>Severity</small>
+                <select name="severity">
+                  <option value="info">Info</option>
+                  <option value="better">Getting Better</option>
+                  <option value="danger" selected>Danger</option>
+                  <option value="critical">Critical</option>
+                </select>
+              </label>
+              <label>
+                <small>Message</small>
+                <input name="message" placeholder="Gas pressure rising near the east tunnel..." required />
+              </label>
+              <button class="full" type="submit">Send Broadcast</button>
+            </form>
+          </div>
+
+          <div class="grid">
+            <div class="col-6 card stack" style="box-shadow:none;">
+              <h3>Players</h3>
+              <div id="playerList" class="player-list"></div>
+            </div>
+            <div class="col-6 card stack" style="box-shadow:none;">
+              <h3>Power Choices + Sidekick Calls</h3>
+              <div id="actionList" class="action-list"></div>
+            </div>
+          </div>
+
+          <div class="card stack" style="box-shadow:none;">
+            <h3>Recent Broadcasts</h3>
+            <div id="broadcastList" class="broadcast-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="/js/shared.js"></script>
+  <script src="/js/host.js"></script>
+</body>
+</html>
